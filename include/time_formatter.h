@@ -5,7 +5,7 @@
 
 class TimeFormatter{
 private:
-    ClockConfig config();
+    ClockConfig config;
 public:
     TimeFormatter(const ClockConfig& cfg = ClockConfig());
     std::string formatCurrentTime();
