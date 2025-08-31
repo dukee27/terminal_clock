@@ -94,7 +94,7 @@ public:
                 showInstruction();
             }
 
-            std::cout << "Curren Time : " << formatter.formatCurrentTime() << std::endl;
+            std::cout << "Current Time : " << formatter.formatCurrentTime() << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(config.refreshRateMs));
         }
         if(inputHandler.joinable()){
