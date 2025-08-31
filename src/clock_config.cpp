@@ -35,3 +35,17 @@ ClockConfig ClockPresets::iso(){
     config.showDate = true;
     return config;
 }
+
+ClockConfig ClockPresets::withTimezone(const std::string& tz){
+    ClockConfig config;
+    config.timezone = tz;
+    config.showTimezone = true;
+    return config;
+}
+
+ClockConfig ClockPresets::worldClock(){
+    ClockConfig config;
+    config.showMultipleTimezone = true;
+    config.additionalZones = {"UTC","America/New_York","Europe/London","Asia/Tokyo"};
+    return config;
+}
