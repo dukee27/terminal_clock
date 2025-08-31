@@ -26,9 +26,11 @@ public:
         std::cout << "Commands:\n";
         std::cout << "1. Minimal (HH:MM) | 2. standard (HH:MM::SS) | 3. Full (date + time + ms) \n";
         std::cout << "4. American (12 hour format) | 5. iso\n | 6. Custom Format\n";
+        std::cout << "t = Timezones\n";
         std::cout << "q = quite \n\n";
     }
 
+    
     void handleUserChoice(int choice){
         
         formatter.updateConfig(config);
@@ -40,6 +42,13 @@ public:
         std::getline(std::cin,customFormat);
         config.timeFormat = customFormat;
     }
+    void handleCustomTimezone() {
+        std::cout << "Enter timezone (e.g., UTC, America/New_York, Asia/Tokyo): ";
+        std::string tz;
+        std::getline(std::cin, tz);
+        config.timezone = tz;
+        config.showTimezone = true;
+    }
     void inputThread(){
         std::string input;
         while(running){
@@ -48,20 +57,24 @@ public:
             char choice = input[0];
 
             std::lock_guard<std::mutex> lock(configMutex);
-
+            std::string currentTz = config.timezone;
             switch(choice) {
-            case '1': config = ClockPresets::minimal();configChanged = true; break;
-            case '2': config = ClockPresets::standard();configChanged = true;break;
-            case '3': config = ClockPresets::full();configChanged = true;break;
-            case '4': config = ClockPresets::american();configChanged = true;break;
-            case '5': config = ClockPresets::iso();configChanged = true;break;
-            case '6': handleCustomFormat();configChanged = true;break;
+            case '1': config = ClockPresets::minimal();config.timezone = currentTz;configChanged = true; break;
+            case '2': config = ClockPresets::standard();config.timezone = currentTz;configChanged = true;break;
+            case '3': config = ClockPresets::full();config.timezone = currentTz;configChanged = true;break;
+            case '4': config = ClockPresets::american();config.timezone = currentTz;configChanged = true;break;
+            case '5': config = ClockPresets::iso();config.timezone = currentTz;configChanged = true;break;
+            case '6': handleCustomFormat();config.timezone = currentTz;configChanged = true;break;
+            case 'T':
+            case 't': handleCustomTimezone();configChanged = true;break;
             case 'Q':
             case 'q':
                 running = false;
                 std::cout << "clock is turned off..";
                 break;
             }
+           
+            formatter.updateConfig(config);
         }
     }
     void run(){
