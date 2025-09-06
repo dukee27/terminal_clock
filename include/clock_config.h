@@ -22,6 +22,8 @@ public:
 
     std::string textColor = "white";
     bool clearScreen = true;
+    void loadFromJson(const std::string &filename);
+    void saveToJson(const std::string &filename) const;
 };
 
 class ClockPresets{

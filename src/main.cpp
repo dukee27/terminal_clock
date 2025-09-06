@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <atomic>
+
 #include "time_formatter.h"
 #include "clock_config.h"
 
@@ -19,8 +20,8 @@ private:
     std::atomic<bool> configChanged{false};
     std::mutex configMutex;
 public:
-    InteractiveClockApp() : config(ClockPresets::standard()),formatter(config) {}
-
+   InteractiveClockApp(const ClockConfig& cfg) : config(cfg), formatter(config) {}
+    ClockConfig getConfig() const { return config; } 
     void showInstruction(){
         std::cout << "\n=== Terminal Clock === \n";
         std::cout << "Commands:\n";
@@ -103,7 +104,11 @@ public:
     }
 };
 int main(){
-    InteractiveClockApp app;
+    ClockConfig config;
+    config.loadFromJson("config.json");
+    InteractiveClockApp app(config);
     app.run();
+    config = app.getConfig(); 
+    config.saveToJson("config.json");
     return 0;
 }

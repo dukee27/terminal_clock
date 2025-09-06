@@ -1,4 +1,45 @@
 #include <clock_config.h>
+#include <nlohmann/json.hpp>
+#include <fstream>
+
+using json = nlohmann::json;
+void ClockConfig::loadFromJson(const std::string& filename ){
+    std::ifstream file(filename);
+    if(!file){
+        return;
+    }
+
+    json j;
+    file >> j;
+
+    if(j.contains("timeFormat")) timeFormat = j["timeFormat"].get<std::string>();
+    if(j.contains("dateFormat")) dateFormat = j["dateFormat"].get<std::string>();
+    if (j.contains("showDate")) showDate = j["showDate"].get<bool>();
+    if (j.contains("showMilliseconds")) showMilliseconds = j["showMilliseconds"].get<bool>();
+    if (j.contains("timezone")) timezone = j["timezone"].get<std::string>();
+    if (j.contains("showTimezone")) showTimezone = j["showTimezone"].get<bool>();
+    if (j.contains("refreshRateMs")) refreshRateMs = j["refreshRateMs"].get<int>();
+    if (j.contains("textColor")) textColor = j["textColor"].get<std::string>();
+    if (j.contains("clearScreen")) clearScreen = j["clearScreen"].get<bool>();
+}
+
+void ClockConfig::saveToJson(const std::string& filename) const{
+    json j;
+    j["timeFormat"] = timeFormat;
+    j["dateFormat"] = dateFormat;
+    j["showDate"] = showDate;
+    j["showMilliseconds"] = showMilliseconds;
+    j["timezone"] = timezone;
+    j["showTimezone"] = showTimezone;
+    j["refreshRateMs"] = refreshRateMs;
+    j["textColor"] = textColor;
+    j["clearScreen"] = clearScreen;
+
+    std::ofstream file(filename);
+    if (file) {
+        file << j.dump(4); 
+    }
+}
 
 ClockConfig ClockPresets::minimal(){
     ClockConfig config;

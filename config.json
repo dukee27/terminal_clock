@@ -1,0 +1,11 @@
+{
+    "clearScreen": true,
+    "dateFormat": "%Y:%m:%d",
+    "refreshRateMs": 1000,
+    "showDate": false,
+    "showMilliseconds": false,
+    "showTimezone": false,
+    "textColor": "white",
+    "timeFormat": "%H:%M",
+    "timezone": "local"
+}
